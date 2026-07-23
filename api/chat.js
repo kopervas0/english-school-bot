@@ -19,7 +19,39 @@ const SYSTEM_PROMPT = `Ты — дружелюбный ассистент онл
 3. Если человек хочет записаться на пробный урок — вежливо попроси имя и телефон/удобный мессенджер, и подтверди, что заявку передашь администратору.
 4. Если не знаешь ответа — не выдумывай, предложи оставить контакт для связи с администратором.
 
+ВАЖНО — ФИКСАЦИЯ ЗАЯВКИ:
+Как только человек назвал И имя, И телефон (или мессенджер для связи), добавь в самый конец своего ответа отдельной строкой служебный маркер в точном формате (пользователь его не увидит, это только для системы):
+[[LEAD: имя=ИМЯ; контакт=ТЕЛЕФОН_ИЛИ_МЕССЕНДЖЕР; тема=КОРОТКО_ЧТО_ХОЧЕТ]]
+Добавляй этот маркер только один раз за диалог, когда данные только что стали полными. Не добавляй его, если данных не хватает, и не показывай его формат пользователю.
+
 Никогда не называй себя языковой моделью или ИИ без запроса — ты просто "ассистент школы".`;
+
+async function sendLeadToTelegram({ name, contact, topic }) {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  // Если Telegram не настроен — просто пропускаем, не ломаем чат для пользователя
+  if (!botToken || !chatId) {
+    console.warn('TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не настроены — заявка не отправлена');
+    return;
+  }
+
+  const text =
+    '🎓 Новая заявка с сайта\n\n' +
+    `Имя: ${name.trim()}\n` +
+    `Контакт: ${contact.trim()}\n` +
+    `Запрос: ${topic.trim()}`;
+
+  try {
+    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text })
+    });
+  } catch (err) {
+    console.error('Не удалось отправить заявку в Telegram:', err);
+  }
+}
 
 export default async function handler(req, res) {
   // Разрешаем только POST-запросы
@@ -59,10 +91,18 @@ export default async function handler(req, res) {
     }
 
     const data = await response.json();
-    const reply = (data.content || [])
+    let reply = (data.content || [])
       .map((block) => block.text || '')
       .join('\n')
       .trim();
+
+    // Ищем служебный маркер заявки и убираем его из текста, который увидит пользователь
+    const leadMatch = reply.match(/\[\[LEAD:\s*имя=(.*?);\s*контакт=(.*?);\s*тема=(.*?)\]\]/i);
+    if (leadMatch) {
+      const [fullMatch, name, contact, topic] = leadMatch;
+      reply = reply.replace(fullMatch, '').trim();
+      await sendLeadToTelegram({ name, contact, topic });
+    }
 
     return res.status(200).json({ reply });
   } catch (err) {
