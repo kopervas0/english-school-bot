@@ -86,7 +86,7 @@
 }
 </script>
 <style>
-  body { margin: 0; }
+  body { margin: 0; overflow-x: hidden; }
   a.plain { text-decoration: none; }
   .img-slot {
     width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
@@ -113,6 +113,42 @@
   .schedule-slot-btn.active { border-color: var(--color-accent); background: var(--color-accent); color: var(--color-bg); }
   .schedule-slot-btn.taken { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
   .schedule-slot-btn.taken:hover { border-color: var(--color-divider); color: var(--color-text); }
+
+  /* ===== Responsive grids ===== */
+  .grid-hero, .grid-schedule, .grid-about, .grid-contact {
+    display: grid; gap: var(--space-8);
+  }
+  .grid-hero { grid-template-columns: 1.05fr 0.95fr; align-items: center; }
+  .grid-schedule { grid-template-columns: 0.85fr 1.15fr; align-items: start; }
+  .grid-about { grid-template-columns: 0.75fr 1.25fr; align-items: center; }
+  .grid-contact { grid-template-columns: 0.85fr 1.15fr; }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6); }
+
+  .nav { flex-wrap: wrap; row-gap: 10px; }
+
+  .media-box-hero { height: 440px; }
+  .media-box-about { height: 400px; }
+  .chat-card { height: 480px; }
+
+  @media (max-width: 860px) {
+    .grid-hero, .grid-schedule, .grid-about, .grid-contact { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    h1 { font-size: 34px !important; }
+    .media-box-hero, .media-box-about { height: 320px; }
+  }
+  @media (max-width: 560px) {
+    .grid-3 { grid-template-columns: 1fr; }
+    .grid-4 { grid-template-columns: 1fr; }
+    .nav { padding: var(--space-4) var(--space-4) !important; }
+    .nav .seg { margin-left: 0 !important; order: 3; }
+    .media-box-hero, .media-box-about { height: 220px; }
+    .chat-card { height: 420px; }
+    h1 { font-size: 28px !important; }
+    h2 { font-size: 26px !important; }
+  }
 </style>
 </head>
 <body>
@@ -134,7 +170,7 @@
   </div>
 
   <!-- HERO -->
-  <div style="max-width:1180px; margin:0 auto; padding:var(--space-8) var(--space-6) var(--space-8); display:grid; grid-template-columns:1.05fr 0.95fr; gap:var(--space-8); align-items:center;">
+  <div class="grid-hero" style="max-width:1180px; margin:0 auto; padding:var(--space-8) var(--space-6) var(--space-8);">
     <div>
       <div class="tag tag-outline" style="margin-bottom:var(--space-4);" data-i18n="hero.badge">Индивидуальные онлайн-занятия</div>
       <h1 style="font-size:44px; max-width:520px;"><span data-i18n="hero.h1a">Английский язык</span><br><span data-i18n="hero.h1b">1 на 1, под вашу цель</span></h1>
@@ -158,7 +194,7 @@
         </div>
       </div>
     </div>
-    <div class="lighten" style="border-radius:var(--radius-lg); overflow:hidden; height:440px;">
+    <div class="lighten media-box media-box-hero" style="border-radius:var(--radius-lg); overflow:hidden;">
       <div class="img-slot" role="img" aria-label="Фото преподавателя Екатерины Копервас">Фото преподавателя<br>(на тёмном фоне)</div>
     </div>
   </div>
@@ -170,7 +206,7 @@
       <h2 data-i18n="formats.h2">Занятия под любую задачу</h2>
       <p class="text-muted" data-i18n="formats.sub">Программа собирается индивидуально — от разговорной практики до карьерных целей.</p>
     </div>
-    <div id="formats-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4);">
+    <div id="formats-grid" class="grid-3">
       <div class="card elev-sm">
         <i class="ph ph-chat-circle" style="font-size:22px; color:var(--color-accent);"></i>
         <div class="card-title">Разговорный английский</div>
@@ -197,7 +233,7 @@
         <h2 data-i18n="trial.h2">Как проходит пробный урок</h2>
         <p class="text-muted" data-i18n="trial.sub">Знакомство без риска — понимаем цели и уровень, вы получаете план занятий.</p>
       </div>
-      <div id="trial-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-6);">
+      <div id="trial-grid" class="grid-4">
         <div>
           <div style="display:flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:50%; border:1px solid var(--color-accent); color:var(--color-accent); font-weight:600; font-size:13px; margin-bottom:var(--space-3);">1</div>
           <div class="card-title" style="font-size:16px; margin-bottom:var(--space-1);">Заявка</div>
@@ -229,7 +265,7 @@
       <h2 data-i18n="pricing.h2">Цены и пакеты</h2>
       <p class="text-muted" data-i18n="pricing.sub">Чем больше пакет — тем выгоднее стоимость одного занятия.</p>
     </div>
-    <div id="pricing-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4);">
+    <div id="pricing-grid" class="grid-3">
       <div class="card" style="border:1px solid var(--color-divider); background:transparent;">
         <div class="tag tag-accent" style="align-self:flex-start; display:none;">Популярный</div>
         <div class="card-title">Пробный урок</div>
@@ -266,7 +302,7 @@
 
   <!-- SCHEDULE -->
   <div id="schedule" style="background:var(--color-surface); border-top:1px solid var(--color-divider); border-bottom:1px solid var(--color-divider);">
-    <div style="max-width:1180px; margin:0 auto; padding:var(--space-8) var(--space-6); display:grid; grid-template-columns:0.85fr 1.15fr; gap:var(--space-8); align-items:start;">
+    <div class="grid-schedule" style="max-width:1180px; margin:0 auto; padding:var(--space-8) var(--space-6);">
       <div>
         <div class="card-kicker" style="margin-bottom:var(--space-2);" data-i18n="schedule.eyebrow">Расписание</div>
         <h2 data-i18n="schedule.h2">Найдите удобное время</h2>
@@ -296,8 +332,8 @@
   </div>
 
   <!-- ABOUT TEACHER -->
-  <div id="about" style="max-width:1180px; margin:0 auto; padding:var(--space-8) var(--space-6); display:grid; grid-template-columns:0.75fr 1.25fr; gap:var(--space-8); align-items:center;">
-    <div class="lighten" style="position:relative; border-radius:var(--radius-lg); overflow:hidden; height:400px;">
+  <div id="about" class="grid-about" style="max-width:1180px; margin:0 auto; padding:var(--space-8) var(--space-6);">
+    <div class="lighten media-box media-box-about" style="position:relative; border-radius:var(--radius-lg); overflow:hidden;">
       <div class="img-slot" role="img" aria-label="Фото преподавателя Екатерины Копервас">Фото преподавателя<br>(на тёмном фоне)</div>
     </div>
     <div>
@@ -315,14 +351,14 @@
 
   <!-- CONTACT / built-in chat mockup (as in the uploaded design) -->
   <div id="contact" style="background:var(--color-section); background-image:radial-gradient(circle at 20% 20%, var(--color-section-glow), var(--color-section) 60%);">
-    <div style="max-width:1180px; margin:0 auto; padding:var(--space-8) var(--space-6); display:grid; grid-template-columns:0.85fr 1.15fr; gap:var(--space-8);">
+    <div class="grid-contact" style="max-width:1180px; margin:0 auto; padding:var(--space-8) var(--space-6);">
       <div>
         <div class="card-kicker" style="margin-bottom:var(--space-2); color:var(--color-accent-2);" data-i18n="contact.eyebrow">Связаться</div>
         <h2 data-i18n="contact.h2">Запишитесь на пробный урок</h2>
         <p style="opacity:0.85; max-width:400px; margin-bottom:var(--space-4);" data-i18n="contact.sub">Напишите в чат — отвечу лично и подберу удобное время и формат занятий.</p>
         <div style="font-size:13px; opacity:0.75;" data-i18n="contact.respondNote">Отвечаю на сообщения в течение 24 часов</div>
       </div>
-      <div class="card elev-lg" style="padding:0; overflow:hidden; display:flex; flex-direction:column; height:480px;">
+      <div class="card elev-lg chat-card" style="padding:0; overflow:hidden; display:flex; flex-direction:column;">
         <div style="display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) var(--space-4); border-bottom:1px solid var(--color-divider);">
           <div style="width:36px; height:36px; border-radius:50%; background:var(--color-accent-800); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
             <i class="ph ph-robot" style="color:var(--color-accent); font-size:18px;"></i>
