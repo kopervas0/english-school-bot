@@ -1,5 +1,8 @@
 {
-  "name": "english-school-landing",
+  "name": "ekaterina-kopervas-site",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@vercel/kv": "^1.0.1"
+  }
 }
