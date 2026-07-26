@@ -363,6 +363,7 @@ a { color: inherit; }
   align-self: stretch;
   max-width: 100%;
   padding: 16px;
+  white-space: normal;
 }
 .assistant__widget-title { font-weight: 700; color: var(--card); margin-bottom: 10px; font-size: 0.9rem; }
 
